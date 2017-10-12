@@ -2,8 +2,74 @@
 <html>
 <head>
 	<title>Kienan</title>
+	<script type="text/javascript" src="./two.js"></script>
+	<script type="text/javascript">
+		function shrink() {
+			document.getElementById('shrink').style.width = 0;
+		}
+
+		function big() {
+			document.getElementById('shrink').style.width = '250px';
+		}
+	</script>
+	<style type="text/css">
+		.shrink {
+			font-family: sans-serif;
+			width: 250px;
+			background-color: lightblue;
+			white-space: nowrap;
+			overflow: hidden;
+			transition: width .2s;
+		}
+	</style>
 </head>
 <body>
+	<input type="color" name="">
 	<p style="font-family:sans-serif;">The rendering of this page is left as an exercise to the user.</p>
+	<div id="twocanvas" width="512px" height="512px"></div>
+	<script type="text/javascript">
+		var elem = document.getElementById("twocanvas");
+		var params = { width: 256, height: 256};
+		var two = new Two(params).appendTo(elem);
+		var group = new Two.Group();
+		group.add(two.makeLine(50, 50, 100, 50));
+		group.add(two.makeLine(50, 100, 100, 100));
+		group.add(two.makeLine(55, 50, 55, 65));
+		group.add(two.makeLine(95, 50, 95, 65));
+		group.add(two.makeLine(55, 100, 55, 85));
+		group.add(two.makeLine(95, 100, 95, 85));
+		group.add(two.makeLine(55, 65, 95, 85));
+		group.add(two.makeLine(95, 65, 55, 85));
+		var loadingText = new Two.Text("LOADING", 75, 120);
+		var loadingText2 = new Two.Text("LOADING", 75, 30);
+		loadingText2.rotation = Math.PI;
+		loadingText.alignment = 'center';
+		loadingText2.alignment = 'center';
+		two.add(loadingText);
+		two.add(loadingText2);
+		group.add(loadingText);
+		group.add(loadingText2);
+		group.center();
+		group.translation.set(two.width / 2, two.height / 2);
+		group.linewidth = 5;
+		group.cap = "round";
+		group.rotation = .0001;
+		two.add(group);
+		
+		two.bind('update', function(frameCount) {
+			//console.log(group.rotation);
+			if (group.rotation > 0.9999 * 2 * Math.PI) {
+				group.rotation = 0.0001;
+			}
+			var bump = Math.abs(Math.sin(group.rotation) * .25);
+			if (bump < .0001) {
+				group.rotation += .0001;
+			} else {
+				group.rotation += bump;
+			}
+		}).play();
+	</script>
+	<div class="shrink" id="shrink">Testing testing 1 2 3</div>
+	<button onclick="shrink()">Small</button><button onclick="big()">Big</button>
 </body>
 </html>
