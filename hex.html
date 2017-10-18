@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hexagons</title>
+	<script type="text/javascript" src="./two.js"></script>
+</head>
+<body>
+	<div id="canvas"></div>
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+		var twoParams = {fullscreen: true, width: window.innerWidth, height: window.innerHeight};
+		var two = new Two(twoParams).appendTo(canvas);
+
+		// Let's establish some globals
+		var hexCount = 0;
+		var size = 64;
+		var height = size * 2;
+		var width = Math.sqrt(3)/2 * height;
+		var horiz = height * .75;
+		var vert = width / 2;
+		var seedRow = [];
+		var currentX = size, currentY = vert;
+
+		// Generate the top "row" of hexagons
+		var seedShiftedDown = false;
+		while (currentX < two.width) {
+			seedRow.push(two.makePolygon(currentX, currentY, size, 6));
+			two.update();
+			hexCount++;
+			if (seedShiftedDown) { currentY -= vert; }
+			else { currentY += vert; }
+			currentX += horiz;
+			seedShiftedDown = !seedShiftedDown;
+		}
+
+		// For each hex in the seed row, let's generate a column
+		seedRow.forEach(function(rootHex) {
+			currentX = rootHex.translation.x;
+			currentY = rootHex.translation.y;
+			while (currentY < two.height) {
+				currentY += 2 * vert;
+				two.makePolygon(currentX, currentY, size, 6);
+				hexCount++;
+				two.update();
+			}
+		});
+
+		two.update();
+		console.log(hexCount);
+	</script>
+</body>
+</html>
