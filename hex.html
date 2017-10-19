@@ -13,20 +13,32 @@
 
 		// Let's establish some globals
 		var hexCount = 0;
-		var size = 64;
+		var size = 32;
 		var height = size * 2;
 		var width = Math.sqrt(3)/2 * height;
 		var horiz = height * .75;
 		var vert = width / 2;
 		var seedRow = [];
-		var currentX = size, currentY = vert;
+		//var currentX = size, currentY = vert;
+		var currentX = two.width/2, currentY = two.height/2;
+
+		function customHex(x, y) {
+			var hex = two.makePolygon(x, y, size, 6);
+			//hex.scale = Math.random();
+			hex.scale = .5;
+			return hex;
+		}
 
 		// Generate the top "row" of hexagons
 		var seedShiftedDown = false;
 		while (currentX < two.width) {
-			seedRow.push(two.makePolygon(currentX, currentY, size, 6));
-			two.update();
+			seedRow.push(customHex(currentX, currentY));
 			hexCount++;
+			if (currentX != two.width/2) {
+				seedRow.push(customHex(two.width - currentX, currentY));
+			}
+			hexCount++;
+			two.update();
 			if (seedShiftedDown) { currentY -= vert; }
 			else { currentY += vert; }
 			currentX += horiz;
@@ -34,15 +46,24 @@
 		}
 
 		// For each hex in the seed row, let's generate a column
+		seedShiftedDown = false;
 		seedRow.forEach(function(rootHex) {
 			currentX = rootHex.translation.x;
+			// if (seedShiftedDown) {
+			// 	currentY = rootHex.translation.y - 2 * vert;
+			// } else {
+			// 	currentY = rootHex.translation.y;
+			// }
 			currentY = rootHex.translation.y;
 			while (currentY < two.height) {
 				currentY += 2 * vert;
-				two.makePolygon(currentX, currentY, size, 6);
+				customHex(currentX, currentY);
+				hexCount++;
+				customHex(currentX, two.height - currentY);
 				hexCount++;
 				two.update();
 			}
+			seedShiftedDown = !seedShiftedDown;
 		});
 
 		two.update();
