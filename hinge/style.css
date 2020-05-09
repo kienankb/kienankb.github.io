@@ -1,0 +1,36 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: gray;
+}
+
+.block {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 500px;
+	height: 40px;
+	background-color: lightblue;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	transform-origin: 50% 0%;
+	animation: swingDown 1.5s ease-in-out, slideRight .25s ease-out;
+	animation-play-state: paused;
+}
+
+@keyframes swingDown {
+	0% { transform: perspective(600px) rotateX(-80deg); }
+	20% { transform: perspective(600px) rotateX(25deg); }
+	40% { transform: perspective(600px) rotateX(-15deg); }
+	60% { transform: perspective(600px) rotateX(10deg); }
+	80% { transform: perspective(600px) rotateX(-5deg); }
+	100% { transform: perspective(600px) rotateX(0deg); }
+}
+
+@keyframes slideRight {
+	0% { translate: -100% 0%; }
+	100% { translate: 0% 0%; }
+}

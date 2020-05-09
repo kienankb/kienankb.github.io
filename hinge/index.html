@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hinge Test</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<button onclick="rippleIn()">Ripple in</button>
+	<div class="block">This is a story all about how</div>
+	<div class="block">My life got twist-turned upside down</div>
+	<div class="block">And I'd like to take a minute and sit right there</div>
+	<div class="block">And tell you how I became the prince of a town called Bel-Air</div>
+	<div class="block">In West Philadelphia born and raised</div>
+	<div class="block">On the playground was where I spent most of my days</div>
+	<div class="block">Chillin' out, maxin', relaxin' all cool</div>
+	<div class="block">And all shootin' some b-ball outside of the school</div>
+	<div class="block">When a couple of guys who were up to no good</div>
+	<div class="block">Started makin' trouble in my neighborhood</div>
+	<div class="block">I got in one lil' fight and my mom got scared</div>
+	<div class="block">She said "you're moving with your auntie and uncle in Bel-Air"</div>
+	<div class="block">I whistled for a cab and when it came near</div>
+	<div class="block">The license plate said fresh and it had dice in the mirror</div>
+	<div class="block">If anything I can say, this cab is rare</div>
+	<div class="block">But I thought, naw, forget it, "yo homes, to Bel-Air"</div>
+	<div class="block">I pulled up to the house about seven or eight</div>
+	<div class="block">And I yelled to the cab "yo homes, smell ya later"</div>
+	<div class="block">I looked at my kingdom, I was finally there</div>
+	<div class="block">To sit on my throne as the Prince of Bel Air</div>
+	<div class="block"></div>
+	<div class="block"><b>Made with pure CSS, with JS for the animation staggering</b></div>
+	<script type="text/javascript">
+		function rippleIn() {
+			Array.from(document.getElementsByClassName('block')).forEach((elem, index) => {
+				setTimeout(() => {
+					document.getElementsByClassName('block')[index].style.animationPlayState = "running";
+				}, index * 100);
+			});
+		}
+	</script>
+</body>
+</html>
