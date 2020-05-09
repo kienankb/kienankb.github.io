@@ -7,6 +7,10 @@ body {
 	background-color: gray;
 }
 
+button {
+	padding: 20px;
+}
+
 .block {
 	display: flex;
 	align-items: center;
