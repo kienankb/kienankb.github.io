@@ -1,0 +1,30 @@
+@font-face {
+    font-family: "Bebas Neue";
+    src: url('./BebasNeue-Regular.ttf');
+}
+
+body {
+    background-color: #eff9f9;
+}
+
+h1, h2, h3 {
+    font-family: "Bebas Neue";
+    color: gray;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+h2 {
+    font-size: 36px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+#content {
+    max-width: 800px;
+    margin: auto;
+}

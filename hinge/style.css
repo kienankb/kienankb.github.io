@@ -21,7 +21,7 @@ button {
 	border-top-right-radius: 20px;
 	border-bottom-right-radius: 20px;
 	transform-origin: 50% 0%;
-	animation: swingDown 1.5s ease-in-out, slideRight .25s ease-out;
+	animation: swingDown 1.5s ease-in-out;
 	animation-play-state: paused;
 }
 
@@ -32,9 +32,4 @@ button {
 	60% { transform: perspective(600px) rotateX(10deg); }
 	80% { transform: perspective(600px) rotateX(-5deg); }
 	100% { transform: perspective(600px) rotateX(0deg); }
-}
-
-@keyframes slideRight {
-	0% { translate: -100% 0%; }
-	100% { translate: 0% 0%; }
 }

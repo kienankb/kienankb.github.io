@@ -24,7 +24,8 @@ function draw() {
 	two.bind('update', function(frameCount) {
 		for (var i = 0; i < points.length; i++) {
 			let dot = two.makeCircle(points[i].x, points[i].y, 5);
-			dot.fill = 'red';
+			dot.fill = 'black';
+			dot.noStroke();
 		}
 	}).play();
 }
