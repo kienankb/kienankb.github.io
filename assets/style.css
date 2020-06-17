@@ -21,7 +21,9 @@ h2 {
 }
 
 h3 {
+    max-width: 50%;
     font-size: 24px;
+    border-top: 1px solid gray;
 }
 
 #content {
