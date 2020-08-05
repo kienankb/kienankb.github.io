@@ -9,7 +9,6 @@ body {
 
 h1, h2, h3 {
     font-family: "Bebas Neue";
-    color: gray;
 }
 
 h1 {
@@ -21,12 +20,42 @@ h2 {
 }
 
 h3 {
-    max-width: 50%;
     font-size: 24px;
-    border-top: 1px solid gray;
+    margin-bottom: 0px;
+}
+
+a {
+    color: unset;
+}
+
+section {
+    display: flex;
+    flex-wrap: wrap;
+    width: 800px;
 }
 
 #content {
     max-width: 800px;
     margin: auto;
+}
+
+.tileContent {
+    background-color: rgba(0, 0, 0, .75);
+    color: white;
+    padding: 5px;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 400px;
+    height: 300px;
+    background-size: cover;
+    filter: grayscale(100%);
+    transition: filter .25s linear;
+}
+
+.tile:hover {
+    filter: grayscale(0%);
 }
