@@ -1,6 +1,13 @@
-class Tile {
-    constructor() {
-        
+var materialCache = {};
+
+function getMaterial(textureName) {
+    if (materialCache[textureName]) {
+        return materialCache[textureName];
+    } else {
+        let map = new THREE.TextureLoader().load(`city_game_tileset/${textureName}.png`);
+        let material = new THREE.SpriteMaterial( {map: map} );
+        materialCache[textureName] = material;
+        return material;
     }
 }
 
@@ -12,41 +19,33 @@ function init() {
     let camera = new THREE.OrthographicCamera(-d * aspect, d*aspect, d, -d, 1, 1000);
     camera.position.set(d, d, d);
     camera.lookAt(scene.position);
-    // var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    let pathPrefix = "city_game_tileset/";
-
-    let groundMaterial = new THREE.SpriteMaterial({
-        map: new THREE.TextureLoader().load(`${pathPrefix}ground_tile_porous1.png`)});
-
-    // var groundMap = new THREE.TextureLoader().load( "city_game_tileset/ground_tile_porous1.png" );
-    var phoneMap = new THREE.TextureLoader().load( "city_game_tileset/telephone-booth1.png" );
-    var trashMap = new THREE.TextureLoader().load( "city_game_tileset/manhole1.png" );
-    var barrierMap = new THREE.TextureLoader().load( "city_game_tileset/barrier1.png" );
-    var ghostMap = new THREE.TextureLoader().load( "city_game_tileset/ghost1.png" );
-    var personMap = new THREE.TextureLoader().load( "city_game_tileset/palm2.png" );
-    // var groundMaterial = new THREE.SpriteMaterial( { map: groundMap } );
-    var phoneMaterial = new THREE.SpriteMaterial( { map: phoneMap } );
-    var trashMaterial = new THREE.SpriteMaterial( { map: trashMap } );
-    var barrierMaterial = new THREE.SpriteMaterial( { map: barrierMap } );
-    var ghostMaterial = new THREE.SpriteMaterial( { map: ghostMap } );
-    var personMaterial = new THREE.SpriteMaterial( { map: personMap } );
-
     let grid = [
-        [[groundMaterial, trashMaterial], [groundMaterial], [groundMaterial, phoneMaterial]],
-        [[groundMaterial], [groundMaterial], [groundMaterial]],
-        [[groundMaterial, personMaterial], [groundMaterial, ghostMaterial], [groundMaterial, barrierMaterial]]
+        [
+            ['ground_tile_porous1', 'manhole1'],
+            ['ground_tile_porous1', 'memorial1'],
+            ['ground_tile_porous1', 'telephone-booth1']
+        ],[
+            ['ground_tile_porous1'],
+            ['ground_tile_porous1'],
+            ['ground_tile_porous1']
+        ],[
+            ['ground_tile_porous1', 'palm2'],
+            ['ground_tile_porous1', 'ghost1'],
+            ['ground_tile_porous1', 'barrier1']
+        ]
     ];
 
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
             let stack = grid[i][j];
-            stack.forEach((tile) => {
-                let sprite = new THREE.Sprite(tile);
+            stack.forEach((tileTexture) => {
+                let material = getMaterial(tileTexture);
+                let sprite = new THREE.Sprite(material);
                 sprite.scale.set(3.55, 7.490, 1);
                 sprite.position.set(j, 0, i);
                 scene.add(sprite);
