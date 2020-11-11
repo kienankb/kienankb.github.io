@@ -1,4 +1,17 @@
 var materialCache = {};
+var playerPos = {x: 2, y: 1};
+
+function movePlayer(keypress) {
+    if (keypress.code === 'ArrowUp') {
+        playerPos.y--;
+    } else if (keypress.code === 'ArrowDown') {
+        playerPos.y++;
+    } else if (keypress.code === 'ArrowRight') {
+        playerPos.x--;
+    } else if (keypress.code === 'ArrowLeft') {
+        playerPos.x++;
+    }
+}
 
 function getMaterial(textureName) {
     if (materialCache[textureName]) {
@@ -11,8 +24,16 @@ function getMaterial(textureName) {
     }
 }
 
+function getSprite(material) {
+    let sprite = new THREE.Sprite(getMaterial(material));
+    sprite.scale.set(3.55, 7.490, 1);
+    return sprite;
+}
+
 function init() {
-    var scene = new THREE.Scene();
+    let scene = new THREE.Scene();
+
+    document.addEventListener('keydown', movePlayer);
 
     let aspect = window.innerWidth / window.innerHeight;
     let d = 10;
@@ -35,7 +56,7 @@ function init() {
             ['ground_tile_porous1']
         ],[
             ['ground_tile_porous1', 'palm2'],
-            ['ground_tile_porous1', 'ghost1'],
+            ['ground_tile_porous1'],
             ['ground_tile_porous1', 'barrier1']
         ]
     ];
@@ -44,18 +65,20 @@ function init() {
         for (let j = 0; j < grid[i].length; j++) {
             let stack = grid[i][j];
             stack.forEach((tileTexture) => {
-                let material = getMaterial(tileTexture);
-                let sprite = new THREE.Sprite(material);
-                sprite.scale.set(3.55, 7.490, 1);
+                let sprite = getSprite(tileTexture);
                 sprite.position.set(j, 0, i);
                 scene.add(sprite);
             });
         }
     }
 
+    let playerSprite = getSprite('ghost1');
+    scene.add(playerSprite);
+
     camera.position.z = 10;
 
     var animate = function () {
+        playerSprite.position.set(playerPos.y, 0, playerPos.x);
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     };
