@@ -73,12 +73,21 @@ function init() {
     }
 
     let playerSprite = getSprite('ghost1');
+    let playerShadow = getSprite('shadow1');
+    scene.add(playerShadow);
     scene.add(playerSprite);
 
     camera.position.z = 10;
 
-    var animate = function () {
-        playerSprite.position.set(playerPos.y, 0, playerPos.x);
+    let start;
+    var animate = function (timestamp) {
+        if (!start) {
+            start = timestamp;
+        }
+        const elapsed = timestamp - start;
+        let hoverOffset = Math.sin(elapsed/1000)*.15 + .5;
+        playerSprite.position.set(playerPos.y, hoverOffset, playerPos.x);
+        playerShadow.position.set(playerPos.y, 0, playerPos.x);
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     };
