@@ -47,14 +47,22 @@ function init() {
 
     let grid = [
         [
+            ['ground_tile_porous1'],
+            ['ground_tile_porous1'],
+            ['ground_tile_porous1'],
+            ['ground_tile_porous1']
+        ],[
+            ['ground_tile_porous1'],
             ['ground_tile_porous1', 'manhole1'],
             ['ground_tile_porous1', 'memorial1'],
             ['ground_tile_porous1', 'telephone-booth1']
         ],[
             ['ground_tile_porous1'],
             ['ground_tile_porous1'],
+            ['ground_tile_porous1'],
             ['ground_tile_porous1']
         ],[
+            ['ground_tile_porous1'],
             ['ground_tile_porous1', 'palm2'],
             ['ground_tile_porous1'],
             ['ground_tile_porous1', 'barrier1']
