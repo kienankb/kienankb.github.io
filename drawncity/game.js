@@ -1,15 +1,50 @@
+class TileStack {
+    constructor(tiles, traversable) {
+        this.tiles = tiles;
+        this.traversable = traversable;
+    }
+}
+
+var grid = [
+    [
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true)
+    ],[
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1', 'manhole1'], true),
+        new TileStack(['ground_tile_porous1', 'memorial1'], false),
+        new TileStack(['ground_tile_porous1', 'telephone-booth1'], false)
+    ],[
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1'], true)
+    ],[
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1', 'palm2'], false),
+        new TileStack(['ground_tile_porous1'], true),
+        new TileStack(['ground_tile_porous1', 'barrier1'], false)
+    ]
+];
+
 var materialCache = {};
 var playerPos = {x: 2, y: 1};
 
 function movePlayer(keypress) {
+    let newX = playerPos.x, newY = playerPos.y;
     if (keypress.code === 'ArrowUp') {
-        playerPos.y--;
+        newY--;
     } else if (keypress.code === 'ArrowDown') {
-        playerPos.y++;
+        newY++;
     } else if (keypress.code === 'ArrowRight') {
-        playerPos.x--;
+        newX--;
     } else if (keypress.code === 'ArrowLeft') {
-        playerPos.x++;
+        newX++;
+    }
+    if (newX >= 0 && newY >= 0 && newX < grid.length && newY < grid[0].length && grid[newX][newY] && grid[newX][newY].traversable) {
+        playerPos = {x: newX, y: newY};
     }
 }
 
@@ -45,33 +80,9 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    let grid = [
-        [
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1']
-        ],[
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1', 'manhole1'],
-            ['ground_tile_porous1', 'memorial1'],
-            ['ground_tile_porous1', 'telephone-booth1']
-        ],[
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1']
-        ],[
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1', 'palm2'],
-            ['ground_tile_porous1'],
-            ['ground_tile_porous1', 'barrier1']
-        ]
-    ];
-
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
-            let stack = grid[i][j];
+            let stack = grid[i][j].tiles;
             stack.forEach((tileTexture) => {
                 let sprite = getSprite(tileTexture);
                 sprite.position.set(j, 0, i);
@@ -93,7 +104,7 @@ function init() {
             start = timestamp;
         }
         const elapsed = timestamp - start;
-        let hoverOffset = Math.sin(elapsed/1000)*.15 + .5;
+        let hoverOffset = Math.sin(elapsed/1000)*.15 + .25;
         playerSprite.position.set(playerPos.y, hoverOffset, playerPos.x);
         playerShadow.position.set(playerPos.y, 0, playerPos.x);
         requestAnimationFrame(animate);
