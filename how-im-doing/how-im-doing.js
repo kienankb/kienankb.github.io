@@ -32,6 +32,7 @@ function groupDaysByMonth(data) {
         }
         currentMonth.push(day);
     });
+    months.push(currentMonth);
     return months;
 }
 
