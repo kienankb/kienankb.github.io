@@ -61,12 +61,12 @@ function render(results) {
     let monthSorted = groupDaysByMonth(results.data);
     monthSorted.map((month, monthNumber) => {
         let monthLabelText = moment(month[0].date).format('MMMM YYYY');
-        let monthLabel = new Two.Text(monthLabelText, 105, 150 + (30 * monthNumber));
+        let monthLabel = new Two.Text(monthLabelText, 105, 150 + (25 * monthNumber));
         two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                150 + (30 * day.date.getDate()),
-                150 + (30 * monthNumber),
+                150 + (25 * day.date.getDate()),
+                150 + (25 * monthNumber),
                 25,
                 25);
             dayRect.fill = `#${DAY_COLORS[day.rating]}`;
