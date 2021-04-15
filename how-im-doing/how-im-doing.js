@@ -40,12 +40,17 @@ function render(results) {
     var elem = document.getElementById("twocanvas");
     var two = new Two({fullscreen: true}).appendTo(elem);
     // draw full-height linear
-    let fullHeightLabel = new Two.Text('left-hand side moves from past to present downward', 250, 25);
+    let fullHeightLabel = new Two.Text(
+        'left-hand side moves from past to present downward',
+        55,
+        25);
+    fullHeightLabel.alignment = 'left;'
     two.add(fullHeightLabel);
     let explanationLabel = new Two.Text(
         'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
-        450,
+        55,
         50);
+    explanationLabel.alignment = 'left';
     two.add(explanationLabel);
     let dayHeight = two.height / results.data.length;
     results.data.map((day, i) => {
@@ -60,12 +65,13 @@ function render(results) {
     // draw by month
     let monthSorted = groupDaysByMonth(results.data);
     monthSorted.map((month, monthNumber) => {
-        let monthLabelText = moment(month[0].date).format('MMMM YYYY');
-        let monthLabel = new Two.Text(monthLabelText, 105, 150 + (25 * monthNumber));
+        let monthLabelText = moment(month[0].date).format('MMM YYYY');
+        let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
+        monthLabel.alignment = 'left';
         two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                150 + (25 * day.date.getDate()),
+                110 + (25 * day.date.getDate()),
                 150 + (25 * monthNumber),
                 25,
                 25);
