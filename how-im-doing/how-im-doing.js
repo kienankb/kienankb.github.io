@@ -7,28 +7,33 @@ const DAY_COLORS = {
     "5": "1e90ff"
 };
 
-Papa.parse("./days.csv", {
-    header: true,
-    download: true,
-    skipEmptyLines: true,
-    transform: (value, header) => {
-        if (header === "date") {
-            return new Date(value);
-        }
-        return value;
-    },
-    complete: render,
-});
+function onLoad(presentation) {
+    Papa.parse("./days.csv", {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        transform: (value, header) => {
+            if (header === "date") {
+                return new moment(value, "MM/DD/YYYY");
+            } else if (["create", "care", "talk", "move", "work", "read", "write"].includes(header)) {
+                let toBool = {"0": false, "1": true, "null": null};
+                return toBool[value];
+            }
+            return value;
+        },
+        complete: presentation === '2D' ? render2D : null,
+    });
+}
 
 function groupDaysByMonth(data) {
     let months = [];
     let currentMonth = [];
-    let monthNumber = data[0].date.getMonth();
+    let monthNumber = data[0].date.month();
     data.map(day => {
-        if (day.date.getMonth() !== monthNumber) {
+        if (day.date.month() !== monthNumber) {
             months.push(currentMonth);
             currentMonth = [];
-            monthNumber = day.date.getMonth();
+            monthNumber = day.date.month();
         }
         currentMonth.push(day);
     });
@@ -36,24 +41,16 @@ function groupDaysByMonth(data) {
     return months;
 }
 
-function render(results) {
-    var elem = document.getElementById("twocanvas");
-    var two = new Two({fullscreen: true}).appendTo(elem);
-    // draw full-height linear
+// draw full-height linear
+function render2DLinear(two, data) {
     let fullHeightLabel = new Two.Text(
         'left-hand side moves from past to present downward',
         55,
         25);
     fullHeightLabel.alignment = 'left;'
     two.add(fullHeightLabel);
-    let explanationLabel = new Two.Text(
-        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
-        55,
-        50);
-    explanationLabel.alignment = 'left';
-    two.add(explanationLabel);
-    let dayHeight = two.height / results.data.length;
-    results.data.map((day, i) => {
+    let dayHeight = two.height / data.length;
+    data.map((day, i) => {
         let rect = two.makeRectangle(
             25,
             (i*dayHeight)+(dayHeight/2),
@@ -62,16 +59,19 @@ function render(results) {
         rect.fill = `#${DAY_COLORS[day.rating]}`;
         rect.noStroke();
     });
-    // draw by month
-    let monthSorted = groupDaysByMonth(results.data);
+}
+
+// draw by month
+function render2DCalendar(two, data) {
+    let monthSorted = groupDaysByMonth(data);
     monthSorted.map((month, monthNumber) => {
-        let monthLabelText = moment(month[0].date).format('MMM YYYY');
+        let monthLabelText = month[0].date.format('MMM YYYY');
         let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
         monthLabel.alignment = 'left';
         two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                110 + (25 * day.date.getDate()),
+                110 + (25 * day.date.date()),
                 150 + (25 * monthNumber),
                 25,
                 25);
@@ -79,5 +79,18 @@ function render(results) {
             dayRect.noStroke();
         })
     });
+}
+
+function render2D(results) {
+    var elem = document.getElementById("twocanvas");
+    var two = new Two({fullscreen: true}).appendTo(elem);
+    let explanationLabel = new Two.Text(
+        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
+        55,
+        50);
+    explanationLabel.alignment = 'left';
+    two.add(explanationLabel);
+    render2DLinear(two, results.data);
+    render2DCalendar(two, results.data)
     two.update();
 }
