@@ -41,24 +41,16 @@ function groupDaysByMonth(data) {
     return months;
 }
 
-function render2D(results) {
-    var elem = document.getElementById("twocanvas");
-    var two = new Two({fullscreen: true}).appendTo(elem);
-    // draw full-height linear
+// draw full-height linear
+function render2DLinear(two, data) {
     let fullHeightLabel = new Two.Text(
         'left-hand side moves from past to present downward',
         55,
         25);
     fullHeightLabel.alignment = 'left;'
     two.add(fullHeightLabel);
-    let explanationLabel = new Two.Text(
-        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
-        55,
-        50);
-    explanationLabel.alignment = 'left';
-    two.add(explanationLabel);
-    let dayHeight = two.height / results.data.length;
-    results.data.map((day, i) => {
+    let dayHeight = two.height / data.length;
+    data.map((day, i) => {
         let rect = two.makeRectangle(
             25,
             (i*dayHeight)+(dayHeight/2),
@@ -67,8 +59,11 @@ function render2D(results) {
         rect.fill = `#${DAY_COLORS[day.rating]}`;
         rect.noStroke();
     });
-    // draw by month
-    let monthSorted = groupDaysByMonth(results.data);
+}
+
+// draw by month
+function render2DCalendar(two, data) {
+    let monthSorted = groupDaysByMonth(data);
     monthSorted.map((month, monthNumber) => {
         let monthLabelText = month[0].date.format('MMM YYYY');
         let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
@@ -84,5 +79,18 @@ function render2D(results) {
             dayRect.noStroke();
         })
     });
+}
+
+function render2D(results) {
+    var elem = document.getElementById("twocanvas");
+    var two = new Two({fullscreen: true}).appendTo(elem);
+    let explanationLabel = new Two.Text(
+        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
+        55,
+        50);
+    explanationLabel.alignment = 'left';
+    two.add(explanationLabel);
+    render2DLinear(two, results.data);
+    render2DCalendar(two, results.data)
     two.update();
 }
