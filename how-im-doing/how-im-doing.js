@@ -13,7 +13,10 @@ Papa.parse("./days.csv", {
     skipEmptyLines: true,
     transform: (value, header) => {
         if (header === "date") {
-            return new Date(value);
+            return new moment(value, "MM/DD/YYYY");
+        } else if (["create", "care", "talk", "move", "work", "read", "write"].includes(header)) {
+            let toBool = {"0": false, "1": true, "null": null};
+            return toBool[value];
         }
         return value;
     },
@@ -23,12 +26,12 @@ Papa.parse("./days.csv", {
 function groupDaysByMonth(data) {
     let months = [];
     let currentMonth = [];
-    let monthNumber = data[0].date.getMonth();
+    let monthNumber = data[0].date.month();
     data.map(day => {
-        if (day.date.getMonth() !== monthNumber) {
+        if (day.date.month() !== monthNumber) {
             months.push(currentMonth);
             currentMonth = [];
-            monthNumber = day.date.getMonth();
+            monthNumber = day.date.month();
         }
         currentMonth.push(day);
     });
@@ -65,13 +68,13 @@ function render(results) {
     // draw by month
     let monthSorted = groupDaysByMonth(results.data);
     monthSorted.map((month, monthNumber) => {
-        let monthLabelText = moment(month[0].date).format('MMM YYYY');
+        let monthLabelText = month[0].date.format('MMM YYYY');
         let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
         monthLabel.alignment = 'left';
         two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                110 + (25 * day.date.getDate()),
+                110 + (25 * day.date.date()),
                 150 + (25 * monthNumber),
                 25,
                 25);
