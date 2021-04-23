@@ -7,21 +7,23 @@ const DAY_COLORS = {
     "5": "1e90ff"
 };
 
-Papa.parse("./days.csv", {
-    header: true,
-    download: true,
-    skipEmptyLines: true,
-    transform: (value, header) => {
-        if (header === "date") {
-            return new moment(value, "MM/DD/YYYY");
-        } else if (["create", "care", "talk", "move", "work", "read", "write"].includes(header)) {
-            let toBool = {"0": false, "1": true, "null": null};
-            return toBool[value];
-        }
-        return value;
-    },
-    complete: render,
-});
+function onLoad(presentation) {
+    Papa.parse("./days.csv", {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        transform: (value, header) => {
+            if (header === "date") {
+                return new moment(value, "MM/DD/YYYY");
+            } else if (["create", "care", "talk", "move", "work", "read", "write"].includes(header)) {
+                let toBool = {"0": false, "1": true, "null": null};
+                return toBool[value];
+            }
+            return value;
+        },
+        complete: presentation === '2D' ? render2D : null,
+    });
+}
 
 function groupDaysByMonth(data) {
     let months = [];
@@ -39,7 +41,7 @@ function groupDaysByMonth(data) {
     return months;
 }
 
-function render(results) {
+function render2D(results) {
     var elem = document.getElementById("twocanvas");
     var two = new Two({fullscreen: true}).appendTo(elem);
     // draw full-height linear
