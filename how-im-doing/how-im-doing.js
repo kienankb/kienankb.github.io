@@ -77,34 +77,17 @@ function render2DCalendar(two, data) {
     });
 }
 
-function render2DLabels(two) {
-    let explanationLabel = new Two.Text(
-        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
-        55,
-        100);
-    explanationLabel.alignment = 'left';
-    two.add(explanationLabel);
-    let fullHeightLabel = new Two.Text(
-        'time range starts in April 2020 and runs to the present; above is past to present left to right, below is calendar view',
-        55,
-        75);
-    fullHeightLabel.alignment = 'left';
-    two.add(fullHeightLabel);
-}
-
 function render2D(results) {
     var elem = document.getElementById("twocanvas");
     var two = new Two({fullscreen: true}).appendTo(elem);
     render2DLinear(two, results.data);
     render2DCalendar(two, results.data);
-    render2DLabels(two);
     two.update();
 
     window.addEventListener('resize', function() {
         two.clear();
         render2DLinear(two, results.data);
         render2DCalendar(two, results.data)
-        render2DLabels(two);
         two.update();
     }, true);
 }

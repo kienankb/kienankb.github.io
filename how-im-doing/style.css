@@ -2,3 +2,17 @@
     margin: 0;
     padding: 0;
 }
+
+#legendModal {
+    position: fixed;
+    background-color: white;
+    top: 25%;
+    bottom: 50%;
+    left: 25%;
+    right: 25%;
+    z-index: 10;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+}

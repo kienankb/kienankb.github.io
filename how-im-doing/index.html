@@ -3,13 +3,17 @@
 <head>
     <title>How I'm Doing</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./style.css">
     <script type="text/javascript" src="../assets/papaparse.min.js"></script>
     <script src="../assets/moment.min.js"></script>
     <script type="text/javascript" src="../assets/two.js"></script>
     <script type="text/javascript" src="./how-im-doing.js"></script>
-    <style type="text/css" src="./style.css"></style>
 </head>
 <body onload="onLoad('2D')">
     <div id="twocanvas"></div>
+    <div id="legendModal">
+        <p>black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data</p>
+        <p>time range starts in April 2020 and runs to the present; above is past to present left to right, below is calendar view</p>
+    </div>
 </body>
 </html>
