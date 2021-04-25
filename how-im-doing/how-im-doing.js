@@ -43,12 +43,6 @@ function groupDaysByMonth(data) {
 
 // draw full-height linear
 function render2DLinear(two, data) {
-    let fullHeightLabel = new Two.Text(
-        'left-hand side moves from past to present downward',
-        55,
-        75);
-    fullHeightLabel.alignment = 'left;'
-    two.add(fullHeightLabel);
     let dayWidth = two.width * .8 / data.length;
     data.map((day, i) => {
         let rect = two.makeRectangle(
@@ -81,17 +75,27 @@ function render2DCalendar(two, data) {
     });
 }
 
-function render2D(results) {
-    var elem = document.getElementById("twocanvas");
-    var two = new Two({fullscreen: true}).appendTo(elem);
+function render2DLabels(two) {
     let explanationLabel = new Two.Text(
         'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
         55,
         100);
     explanationLabel.alignment = 'left';
     two.add(explanationLabel);
+    let fullHeightLabel = new Two.Text(
+        'left-hand side moves from past to present downward',
+        55,
+        75);
+    fullHeightLabel.alignment = 'left';
+    two.add(fullHeightLabel);
+}
+
+function render2D(results) {
+    var elem = document.getElementById("twocanvas");
+    var two = new Two({fullscreen: true}).appendTo(elem);
     render2DLinear(two, results.data);
-    render2DCalendar(two, results.data)
+    render2DCalendar(two, results.data);
+    render2DLabels(two);
     two.update();
 
     window.addEventListener('resize', function() {
@@ -99,6 +103,7 @@ function render2D(results) {
         two.clear();
         render2DLinear(two, results.data);
         render2DCalendar(two, results.data)
+        render2DLabels(two);
         two.update();
     }, true);
 }
