@@ -46,7 +46,7 @@ function render2DLinear(two, data) {
     let dayWidth = two.width * .8 / data.length;
     data.map((day, i) => {
         let rect = two.makeRectangle(
-            (i*dayWidth)+(dayWidth/2)+(two.width * .1),
+            (i*dayWidth)+(dayWidth/2) + (two.width * .1),
             25,
             dayWidth,
             50);
@@ -67,7 +67,8 @@ function render2DCalendar(two, data) {
         // two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                (two.width * .1) + (dayWidth * day.date.date()),
+                // page margin + (day-of-month day widths) - shapes anchored at corner rather than center
+                (two.width * .1) + (dayWidth * day.date.date()) - (dayWidth / 2),
                 150 + dayWidth * monthNumber,
                 dayWidth * .75,
                 dayWidth * .75);
