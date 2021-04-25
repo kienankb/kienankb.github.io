@@ -1,5 +1,5 @@
 const DAY_COLORS = {
-    "0": "ffffff",
+    "0": "999999",
     "1": "000000",
     "2": "FF0000",
     "3": "FFA500",
@@ -43,19 +43,13 @@ function groupDaysByMonth(data) {
 
 // draw full-height linear
 function render2DLinear(two, data) {
-    let fullHeightLabel = new Two.Text(
-        'left-hand side moves from past to present downward',
-        55,
-        25);
-    fullHeightLabel.alignment = 'left;'
-    two.add(fullHeightLabel);
-    let dayHeight = two.height / data.length;
+    let dayWidth = two.width * .8 / data.length;
     data.map((day, i) => {
         let rect = two.makeRectangle(
+            (i*dayWidth)+(dayWidth/2)+(two.width * .1),
             25,
-            (i*dayHeight)+(dayHeight/2),
-            50,
-            dayHeight);
+            dayWidth,
+            50);
         rect.fill = `#${DAY_COLORS[day.rating]}`;
         rect.noStroke();
     });
@@ -65,32 +59,47 @@ function render2DLinear(two, data) {
 function render2DCalendar(two, data) {
     let monthSorted = groupDaysByMonth(data);
     monthSorted.map((month, monthNumber) => {
-        let monthLabelText = month[0].date.format('MMM YYYY');
-        let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
-        monthLabel.alignment = 'left';
-        two.add(monthLabel);
+        let rowWidth = two.width * .8;
+        let dayWidth = rowWidth / 31;
+        // let monthLabelText = month[0].date.format('MMM YYYY');
+        // let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
+        // monthLabel.alignment = 'left';
+        // two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                110 + (25 * day.date.date()),
-                150 + (25 * monthNumber),
-                25,
-                25);
+                (two.width * .1) + (dayWidth * day.date.date()),
+                150 + dayWidth * monthNumber,
+                dayWidth * .75,
+                dayWidth * .75);
             dayRect.fill = `#${DAY_COLORS[day.rating]}`;
-            dayRect.noStroke();
+            dayRect.stroke = "#FFFFFF"
+            if (day.rating !== "1") {
+                dayRect.noStroke();
+            }
         })
     });
+}
+
+function toggleModal() {
+    let modalElem = document.getElementById('legendModal');
+    if (modalElem.style.visibility === 'hidden') {
+        modalElem.style.visibility = 'visible';
+    } else {
+        modalElem.style.visibility = 'hidden';
+    }
 }
 
 function render2D(results) {
     var elem = document.getElementById("twocanvas");
     var two = new Two({fullscreen: true}).appendTo(elem);
-    let explanationLabel = new Two.Text(
-        'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
-        55,
-        50);
-    explanationLabel.alignment = 'left';
-    two.add(explanationLabel);
     render2DLinear(two, results.data);
-    render2DCalendar(two, results.data)
+    render2DCalendar(two, results.data);
     two.update();
+
+    window.addEventListener('resize', function() {
+        two.clear();
+        render2DLinear(two, results.data);
+        render2DCalendar(two, results.data)
+        two.update();
+    }, true);
 }
