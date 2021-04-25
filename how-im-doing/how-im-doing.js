@@ -1,5 +1,5 @@
 const DAY_COLORS = {
-    "0": "ffffff",
+    "0": "999999",
     "1": "000000",
     "2": "FF0000",
     "3": "FFA500",
@@ -72,7 +72,10 @@ function render2DCalendar(two, data) {
                 dayWidth * .75,
                 dayWidth * .75);
             dayRect.fill = `#${DAY_COLORS[day.rating]}`;
-            dayRect.noStroke();
+            dayRect.stroke = "#FFFFFF"
+            if (day.rating !== "1") {
+                dayRect.noStroke();
+            }
         })
     });
 }
