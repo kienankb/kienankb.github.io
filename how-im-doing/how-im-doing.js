@@ -77,6 +77,15 @@ function render2DCalendar(two, data) {
     });
 }
 
+function toggleModal() {
+    let modalElem = document.getElementById('legendModal');
+    if (modalElem.style.visibility === 'hidden') {
+        modalElem.style.visibility = 'visible';
+    } else {
+        modalElem.style.visibility = 'hidden';
+    }
+}
+
 function render2D(results) {
     var elem = document.getElementById("twocanvas");
     var two = new Two({fullscreen: true}).appendTo(elem);
