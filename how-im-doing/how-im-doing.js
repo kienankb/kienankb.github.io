@@ -59,16 +59,18 @@ function render2DLinear(two, data) {
 function render2DCalendar(two, data) {
     let monthSorted = groupDaysByMonth(data);
     monthSorted.map((month, monthNumber) => {
-        let monthLabelText = month[0].date.format('MMM YYYY');
-        let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
-        monthLabel.alignment = 'left';
-        two.add(monthLabel);
+        let rowWidth = two.width * .8;
+        let dayWidth = rowWidth / 31;
+        // let monthLabelText = month[0].date.format('MMM YYYY');
+        // let monthLabel = new Two.Text(monthLabelText, 55, 150 + (25 * monthNumber));
+        // monthLabel.alignment = 'left';
+        // two.add(monthLabel);
         month.map((day) => {
             let dayRect = two.makeRectangle(
-                110 + (25 * day.date.date()),
-                150 + (25 * monthNumber),
-                25,
-                25);
+                (two.width * .1) + (dayWidth * day.date.date()),
+                150 + dayWidth * monthNumber,
+                dayWidth * .75,
+                dayWidth * .75);
             dayRect.fill = `#${DAY_COLORS[day.rating]}`;
             dayRect.noStroke();
         })
@@ -83,7 +85,7 @@ function render2DLabels(two) {
     explanationLabel.alignment = 'left';
     two.add(explanationLabel);
     let fullHeightLabel = new Two.Text(
-        'left-hand side moves from past to present downward',
+        'time range starts in April 2020 and runs to the present; above is past to present left to right, below is calendar view',
         55,
         75);
     fullHeightLabel.alignment = 'left';
@@ -99,7 +101,6 @@ function render2D(results) {
     two.update();
 
     window.addEventListener('resize', function() {
-        console.debug('test');
         two.clear();
         render2DLinear(two, results.data);
         render2DCalendar(two, results.data)
