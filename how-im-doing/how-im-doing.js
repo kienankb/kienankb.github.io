@@ -97,7 +97,7 @@ function render2D(results) {
     render2DCalendar(two, results.data);
     two.update();
 
-    window.addEventListener('resize', function() {
+    two.bind('resize', function() {
         two.clear();
         render2DLinear(two, results.data);
         render2DCalendar(two, results.data)
