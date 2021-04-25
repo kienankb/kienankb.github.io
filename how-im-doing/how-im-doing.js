@@ -46,16 +46,16 @@ function render2DLinear(two, data) {
     let fullHeightLabel = new Two.Text(
         'left-hand side moves from past to present downward',
         55,
-        25);
+        75);
     fullHeightLabel.alignment = 'left;'
     two.add(fullHeightLabel);
-    let dayHeight = two.height / data.length;
+    let dayWidth = two.width * .8 / data.length;
     data.map((day, i) => {
         let rect = two.makeRectangle(
+            (i*dayWidth)+(dayWidth/2)+(two.width * .1),
             25,
-            (i*dayHeight)+(dayHeight/2),
-            50,
-            dayHeight);
+            dayWidth,
+            50);
         rect.fill = `#${DAY_COLORS[day.rating]}`;
         rect.noStroke();
     });
@@ -87,10 +87,18 @@ function render2D(results) {
     let explanationLabel = new Two.Text(
         'black = basically nonfunctional day, red = bad day, orange = okay day, green = good day, blue = great day, white = missing data',
         55,
-        50);
+        100);
     explanationLabel.alignment = 'left';
     two.add(explanationLabel);
     render2DLinear(two, results.data);
     render2DCalendar(two, results.data)
     two.update();
+
+    window.addEventListener('resize', function() {
+        console.debug('test');
+        two.clear();
+        render2DLinear(two, results.data);
+        render2DCalendar(two, results.data)
+        two.update();
+    }, true);
 }
