@@ -16,7 +16,7 @@ function onLoad(presentation) {
             if (header === "date") {
                 return new moment(value, "MM/DD/YYYY");
             } else if (["create", "care", "talk", "move", "work", "read", "write"].includes(header)) {
-                let toBool = {"0": false, "1": true, "null": null};
+                let toBool = {"0": false, "1": true, "null": null, "": null};
                 return toBool[value];
             }
             return value;
